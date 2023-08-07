@@ -1,0 +1,10 @@
+configVersion: 1
+project: piinotificationsprojectregistry
+
+---
+image: poseidon__common_python
+dockerfile: srv/common-python/Dockerfile
+---
+
+image: poseidon__balancer
+dockerfile: src/poseidon__balancer/Dockerfile

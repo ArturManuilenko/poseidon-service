@@ -1,0 +1,37 @@
+---
+
+service:
+  name: "poseidon_service"
+  echo_colors: true
+  echo_level: debug
+
+
+brokers:
+  default_broker:
+    import_template: "src.poseidon__uni_worker.brokers.amqp_default_broker:DefaultAmqpBroker"
+
+messages:
+  __default__:
+    import_template: "src.poseidon__uni_worker.messages.{{name}}_message:{{name|camel}}V0Message"
+
+  poseidon_input: {}
+
+waitings:
+  __default__:
+    retry_max_count: 100
+    retry_delay_s: 1
+    import_template: src.poseidon__uni_worker.waitings.{{name}}:{{name|camel}}Waiting
+
+  poseidon_db: {}
+
+
+workers:
+  __default__:
+    import_template: "src.poseidon__uni_worker.workers.{{name}}:{{name|camel}}Worker"
+    topic: "{{name}}"
+    broker: default_broker
+
+  poseidon_input:
+    input_message: poseidon_input
+    waiting_for:
+      - poseidon_db
